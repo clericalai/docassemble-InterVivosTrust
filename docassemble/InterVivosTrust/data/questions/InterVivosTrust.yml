@@ -29,6 +29,12 @@ fields:
   - 'city': City
 ---
 question: |
+  Do you want this to be a revocable trust?
+subquestion: |
+   A trust is revocable if the orgininal contributor (Settlor) to the trust be able to change, revoke, access or control the trust after creation.
+yesno: revocable
+---
+question: |
   Do you wish to make distributions by family lineage (_per stirpes_)?
 subquestion: |
   Property is distributed per stirpes if *each branch of the family* is to receive an equal share of an estate. 
@@ -61,6 +67,14 @@ fields:
   - 'middle name': Successor_Trustee.name.middle
     required: False
   - 'last name': Successor_Trustee.name.last
+---
+question: |
+  Briefly list the beneficiaries to the trust, or provide a statement of how unknown beneficiaries will be defined.
+subquestion: |
+ The primary beneficiaries of this Trust are [FIELD Named_Beneficiary_List].
+fields: 
+ - Beneficiary Statement: Named_Beneficiary_List
+   datatype: area
 ---
 template: DOC612
 content file: DOC612.md
