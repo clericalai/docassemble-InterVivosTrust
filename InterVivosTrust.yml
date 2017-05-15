@@ -1,0 +1,142 @@
+metadata:
+  title: Revocable Living Trust
+  short title: InterVivosTrust
+---
+initial: True
+code: |
+    import time
+---
+include:
+  - basic-questions.yml
+---
+objects:
+  - Settlor: Individual
+  - Trustee: Individual
+  - Successor_Trustee: Individual
+---
+images:
+  'Comparison_of_per_stirpes_and_per_capita_inheritance': Comparison_of_per_stirpes_and_per_capita_inheritance.PNG
+---
+mandatory: True
+code: |
+  all_done
+---
+question: |
+  In what city will the trust be created and administered?
+subquestion: |
+  This is the city in which the trust will be resident.  You will also need to sign and notarize the trust documentation in this city.
+fields:
+  - 'city': City
+---
+question: |
+  Do you wish to make distributions by family lineage (_per stirpes_)?
+subquestion: |
+  Property is distributed per stirpes if *each branch of the family* is to receive an equal share of an estate. 
+  ![PER STIRPES CHART](https://upload.wikimedia.org/wikipedia/en/0/05/Comparison_of_per_stirpes_and_per_capita_inheritance.PNG)
+  Per stripes distribution can result in members of the same generation inheriting different amounts, because distribution is determined by family branch, not just individual. The chart is an example showing differences between per stirpes inheritance and per capita by generation inheritance. On the left, each branch receives one third of the estate. On the right, A's only surviving descendant, C, receives one third of the estate. The remaining two thirds are divided among the descendants in the next generation. Image from Wikimedia CC BY-SA 3.0.
+  
+  **Use per stirpes (branch) distribution?**
+yesno: Per_Stirpes
+decoration: Comparison_of_per_stirpes_and_per_capita_inheritance
+---
+question: |
+  Who will be the settlor of the trust?
+subquestion: |
+  The maker of a trust who contributes the initial property of the trust is the *settlor* or *grantor*.
+fields:
+  - 'first name': Settlor.name.first
+  - 'middle name': Settlor.name.middle
+    required: False
+  - 'last name': Settlor.name.last
+---
+code: |
+  true = True
+---
+question: |
+  Who will be the successor trustee?
+subquestion: |
+  The trust is administered by a trustee.  However, in the event that the trustee is removed, a backup (*successor*) trustee must be named to take over the responsibilities of the trustee.
+fields:
+  - 'first name': Successor_Trustee.name.first
+  - 'middle name': Successor_Trustee.name.middle
+    required: False
+  - 'last name': Successor_Trustee.name.last
+---
+template: DOC612
+content file: DOC612.md
+---
+question: |
+  In what county will the trust be created and administered?
+subquestion: |
+  This is the county in which ${ City } is located.
+fields:
+  - 'county': County
+---
+question: |
+  In what state will the trust be created and administered?
+subquestion: |
+  The state determines the residency of the trust, the laws which define its creation and operation, and is difficult to change after creation.
+fields:
+  - 'state': State
+---
+sets: all_done
+question: |
+  Trust documentation complete.
+subquestion: |
+  Download the trust documents for execution and notarization with your counsel.
+buttons:
+  - Finished: leave
+    url: https://www.gooddocs.io
+  - Start Over: restart
+attachments:
+  - name: Revocable Living Trust
+    filename: Revocable_Living_Trust
+    content: ${ DOC612 }
+---
+question: |
+  What is the title of the trust?
+subquestion: |
+  Trust Title:
+  
+  The [FIELD Trust_Name] Revocable Living Trust.
+fields:
+  - 'title': Trust_Name
+---
+code: |
+  if Per_Stirpes == True:
+      Per_Capita = False
+---
+code: |
+  County_Name = County
+---
+question: |
+  When will the trust paperwork be signed?
+subquestion: |
+  This date is the creation date of the trust, and the date upon which the trust's creating documents will be signed and notarized.
+fields:
+  - 'effective date': Effective_Date
+    datatype: date
+---
+question: |
+  Do you wish to limit the age at which a beneficiary can receive trust distributions?
+subquestion: |
+  Age limitations are typically used to prevent minors or young adults from receiving direct distributions of money or property that would be better held in trust until a later age. Until a beneficiary reaches this age, they will be ineligible to receive distributions of trust property.
+fields:
+  - "Limit Ages?": trust_has_age_conditions
+    datatype: yesnoradio
+  - "age (in years)": Age_Of_Inheritance
+    show if: trust_has_age_conditions
+    datatype: range
+    min: 18
+    max: 50
+    step: 1.0
+---
+question: |
+  Who will be the initial Trustee?
+subquestion: |
+  When you create a trust, you'll need to decide who will be trustee when or if you cannot do the job yourself. Trustees have a great deal of authority over the money and property in a trust, so you should choose someone in whom you have great confidence.
+fields:
+  - 'first name': Trustee.name.first
+  - 'middle name': Trustee.name.middle
+    required: False
+  - 'last name': Trustee.name.last
